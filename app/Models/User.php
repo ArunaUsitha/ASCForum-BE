@@ -59,6 +59,7 @@ class User extends Authenticatable
     }
 
     /**
+     * create new user
      * @param $request
      * @return mixed
      */

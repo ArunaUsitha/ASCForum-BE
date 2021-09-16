@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Validator;
 class PostController extends Controller
 {
     const MESSAGE_SERVER_ERROR = 'Server error';
+
     /**
+     * create a new post
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -40,6 +42,7 @@ class PostController extends Controller
     }
 
     /**
+     * Delete a post using the post id
      * @param $postId
      * @return \Illuminate\Http\JsonResponse
      */
@@ -74,6 +77,7 @@ class PostController extends Controller
     }
 
     /**
+     * get all posts using a provided search string.
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -101,6 +105,7 @@ class PostController extends Controller
 
 
     /**
+     * view single post
      * @param $postId
      * @return \Illuminate\Http\JsonResponse
      */
@@ -116,6 +121,7 @@ class PostController extends Controller
     }
 
     /**
+     * approve pending post
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -131,8 +137,13 @@ class PostController extends Controller
             }
 
             if (\Auth::user()->hasRole(Config::get('app.access.role.admin'))) {
-                Post::approve($request->postId);
-                return response()->json(['message' => 'Post approved'], 200);
+
+                if(Post::approve($request->postId)){
+                    return response()->json(['message' => 'Post approved'], 200);
+                }else{
+                    return response()->json(['message' => 'Post approval failed'], 500);
+                }
+
             } else {
                 return response()->json(['message' => 'Un-Authorized action'], 401);
             }
@@ -144,6 +155,7 @@ class PostController extends Controller
     }
 
     /**
+     * reject post
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -173,6 +185,7 @@ class PostController extends Controller
     }
 
     /**
+     * get all pending posts
      * @return \Illuminate\Http\JsonResponse
      */
     public function getPostsPending(): \Illuminate\Http\JsonResponse
@@ -194,6 +207,7 @@ class PostController extends Controller
     }
 
     /**
+     * get all posts relevent to a user
      * @return \Illuminate\Http\JsonResponse
      */
     public function  getUserPosts(): \Illuminate\Http\JsonResponse

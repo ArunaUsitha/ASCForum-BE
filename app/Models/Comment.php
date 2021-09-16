@@ -25,6 +25,11 @@ class Comment extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * create a new comment
+     * @param $request
+     * @return mixed
+     */
     public static function store($request)
     {
         try {

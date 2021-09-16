@@ -20,22 +20,36 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'v1'], function () {
 
-    Route::group(['middleware' => 'auth:sanctum'],function (){
-        Route::get('posts',[PostController::class ,'getUserPosts'])->name('posts');
-        Route::post('post-create',[PostController::class ,'create'])->name('post-create');
-        Route::get('post-delete/{postId}',[PostController::class ,'delete'])->name('post-delete');
-        Route::get('posts-get',[PostController::class ,'getPosts'])->name('posts-get');
-        Route::get('posts-pending',[PostController::class ,'getPostsPending'])->name('post-pending');
-        Route::get('post-view/{postId}',[PostController::class ,'viewPost'])->name('post-view');
+    //guest routes
+    Route::post('register', [AuthController::class, 'register']);
+    Route::post('login', [AuthController::class, 'login'])->name('login');
 
-        Route::post('post-approve',[PostController::class ,'approve'])->name('post-approve');
-        Route::post('post-reject',[PostController::class ,'reject'])->name('post-reject');
+    //auth needed routes
+    Route::group(['middleware' => 'auth:sanctum'], function () {
 
-        Route::post('comment-add',[CommentsController::class ,'addComment'])->name('comment-add');
+        //posts routes
+        Route::group(['prefix' => 'posts'], function () {
+            Route::get('all', [PostController::class, 'getUserPosts'])->name('posts');
+            Route::post('create', [PostController::class, 'create'])->name('post-create');
+            Route::get('delete/{postId}', [PostController::class, 'delete'])->name('post-delete');
+            Route::get('get', [PostController::class, 'getPosts'])->name('posts-get');
+            Route::get('pending', [PostController::class, 'getPostsPending'])->name('post-pending');
+
+            Route::get('view/{postId}', [PostController::class, 'viewPost'])->name('post-view');
+
+            Route::post('approve', [PostController::class, 'approve'])->name('post-approve');
+            Route::post('reject', [PostController::class, 'reject'])->name('post-reject');
+        });
+
+        //comments routes
+        Route::group(['prefix' => 'comment'], function () {
+            Route::post('add', [CommentsController::class, 'addComment'])->name('comment-add');
+        });
+
+        //logout
+        Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
     });
 
-    Route::post('register',[AuthController::class,'register']);
-    Route::post('login',[AuthController::class,'login'])->name('login');
-    Route::post('logout',[AuthController::class,'logout'])->name('logout');
 });
 

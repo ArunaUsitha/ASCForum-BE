@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+    /**
+     * User registrations
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function register(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
@@ -36,7 +41,12 @@ class AuthController extends Controller
     }
 
 
-    public function login(Request $request)
+    /**
+     * User login
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function login(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
             $validation = Validator::make($request->all(), [

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 class CommentsController extends Controller
 {
     /**
+     * add comment to a post
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */

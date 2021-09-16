@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Config;
 
 class Post extends Model
 {
-    const POST_STATUS_APPROVED = 1;
-    const POST_STATUS_PENDING = 0;
-    const POST_STATUS_REJECTED = 2;
+    const POST_STATUS_APPROVED = '1';
+    const POST_STATUS_PENDING = '0';
+    const POST_STATUS_REJECTED = '2';
 
     protected $fillable = [
         'user_id',
@@ -33,6 +33,7 @@ class Post extends Model
     }
 
     /**
+     * create a post
      * @param $request
      * @return mixed
      */
@@ -55,6 +56,7 @@ class Post extends Model
     }
 
     /**
+     * get posts by users role
      * @param User $user
      * @param $search
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
@@ -80,6 +82,7 @@ class Post extends Model
     }
 
     /**
+     * get all pending posts.
      * @param User $user
      * @return mixed
      */
@@ -102,7 +105,9 @@ class Post extends Model
     }
 
     /**
+     * approve posts
      * @param $postId
+     * @return mixed
      */
     public static function approve($postId)
     {
@@ -110,7 +115,7 @@ class Post extends Model
 
             $post = Post::find($postId);
             $post->status = self::POST_STATUS_APPROVED;
-            $post->save();
+            return $post->save();
 
         } catch (\Exception $exception) {
             logThis($exception);
@@ -118,6 +123,7 @@ class Post extends Model
     }
 
     /**
+     * reject a post
      * @param $postId
      */
     public static function reject($postId)
